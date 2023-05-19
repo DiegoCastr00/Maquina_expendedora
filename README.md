@@ -15,11 +15,17 @@ Libreria de lcd: https://www.arduinolibraries.info/libraries/liquid-crystal-i2-c
 
 + SCL(primero) -> 21
 
-+ SDA(segundo)-> 20...
++ SDA(segundo)-> 20
 
 #include <Wire.h> 
 
 #include <LiquidCrystal_I2C.h>
 
 LiquidCrystal_I2C lcd (0x3F, 16, 2);
+
+----- MONEDAS ----------
+
+Fundamental:
++ const int sensorEntrada = 18;   
++ const int sensorSalida = 19; 
 
