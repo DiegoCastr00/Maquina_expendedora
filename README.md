@@ -8,7 +8,8 @@ Librerias para arduino en proteus:
 
 
 
-------  LCD IDC -------
+------  LCD IDC ------- 
+
 Libreria de lcd: https://www.arduinolibraries.info/libraries/liquid-crystal-i2-c
 
 SCL(primero) -> 21
