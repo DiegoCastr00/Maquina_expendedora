@@ -5,4 +5,4 @@ Proteus:
 Librerias para arduino en proteus: 
   https://youtu.be/kWjPiFNrXMc
   
-
+Libreria de lcd: https://www.arduinolibraries.info/libraries/liquid-crystal-i2-c
