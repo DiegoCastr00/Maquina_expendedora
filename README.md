@@ -13,7 +13,6 @@ Librerias para arduino en proteus:
 Libreria de lcd: https://www.arduinolibraries.info/libraries/liquid-crystal-i2-c
 
 SCL(primero) -> 21
-
 SDA(segundo)-> 20
 
 #include <Wire.h> 
