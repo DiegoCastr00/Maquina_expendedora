@@ -1,7 +1,16 @@
 #include <Wire.h>
-#include  <LiquidCrystal_I2C.h>
+#include <LiquidCrystal_I2C.h>
+#include <Stepper.h>
 
 LiquidCrystal_I2C lcd (0x3F, 16, 2);
+
+Stepper motor1(2048, 2, 4, 3, 5);
+Stepper motor2(2048, 6, 8, 7, 9);
+Stepper motor3(2048, 10,12,11,13);
+
+int producto1= A4; //boton del prouducto
+int producto2= A5;
+int producto3= A6;
 
 const int btnReset = 28;
 
@@ -67,8 +76,26 @@ void setup() {
   pinMode(sMoneda4, INPUT_PULLUP);
   pinMode(btnReset, INPUT_PULLUP);
 
+  pinMode(producto1, INPUT_PULLUP);
+  pinMode(producto2, INPUT_PULLUP);
+  pinMode(producto3, INPUT_PULLUP);
+
+  motor1.setSpeed(10);   	
+  motor2.setSpeed(10); 
+  motor3.setSpeed(10);   
+
   attachInterrupt(digitalPinToInterrupt(sensorEntrada), Ext_INT_sensorEntrada, RISING);
   attachInterrupt(digitalPinToInterrupt(sensorSalida), Ext_INT_sensorSalida, FALLING);
+  
+  Wire.begin();
+  lcd.begin(16, 2);
+  lcd.clear();
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd.print("ingrese monedas");
+  lcd.setCursor(0,1);
+  lcd.print("$ ");
+  lcd.print(dineroTotal);
 }
 
 // Bucle repetitivo
@@ -77,10 +104,13 @@ void loop() {
   // Verifica la entrada de una moneda
   if (senEntrada == HIGH && senSalida == LOW) {
     monedaNueva = HIGH;
-    lcd.clear();  
-    lcd.setCursor(0,0);
-    lcd.print("Sensando Moneda...");
     Serial.println("Sensando Moneda...");
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("ingrese monedas");
+    lcd.setCursor(0,1);
+    lcd.print("$ ");
+    lcd.print(dineroTotal);
     leerValorMonedas();
   }
 
@@ -108,6 +138,14 @@ void loop() {
       Serial.print(monDiez);
       Serial.print(" Total: $");
       Serial.print(dineroTotal);
+
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("ingrese monedas");
+      lcd.setCursor(0,1);
+      lcd.print("$ ");
+      lcd.print(dineroTotal);
+
       Serial.print(" Monedas:");
       Serial.print(monedasTotales);
       Serial.println();
@@ -126,9 +164,193 @@ void loop() {
     // Cálculo de total de monedas y dinero
     monedasTotales = 0;
     dineroTotal = 0;
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("ingrese monedas");
+    lcd.setCursor(0,1);
+    lcd.print("$ ");
+    lcd.print(dineroTotal);
 
     Serial.print("boton reset");
   }
+  if(digitalRead(producto1)==0) {
+        delay(200);
+        lcd.clear();
+        lcd.setCursor(3,0);
+        lcd.print("Preparando:");
+        lcd.setCursor(4,1);
+        lcd.print("My Motto");
+        delay(1600);
+        lcd.clear();
+        if(dineroTotal >= 10){
+            lcd.clear();
+            lcd.setCursor(3,0);
+            lcd.print("Aguarde un");
+            lcd.setCursor(5,1);
+            lcd.print("momento");
+                motor1.step(2048);			// envia comando para dar la cantidad de pasos
+                digitalWrite(2, LOW); 		// desenergiza todas las bobinas
+                digitalWrite(3, LOW);
+                digitalWrite(4, LOW);
+                digitalWrite(5, LOW);
+            lcd.clear();
+            lcd.setCursor(1,0);
+            lcd.print("Producto listo");
+            delay(1500);
+            lcd.clear();
+            lcd.setCursor(5,0);
+            lcd.print("cambio: ");
+            dineroTotal = dineroTotal - 10;
+            lcd.setCursor(7,1);
+            lcd.print(dineroTotal);
+            delay(1700);
+            lcd.clear();
+            monCincuenta = 0;
+            monUno = 0;
+            monDos = 0;
+            monCinco = 0;
+            monDiez = 0;
+
+            // Cálculo de total de monedas y dinero
+            monedasTotales = 0;
+            dineroTotal = 0;
+            lcd.clear();
+            lcd.setCursor(0,0);
+            lcd.print("ingrese monedas");
+            lcd.setCursor(0,1);
+            lcd.print("$ ");
+            lcd.print(dineroTotal);
+          } else {
+                lcd.clear();
+                    lcd.setCursor(3,0);
+                    lcd.print("No alcanza");
+                    delay(1500);
+                    lcd.clear();
+                    lcd.setCursor(0,0);
+                    lcd.print("ingrese monedas");
+                    lcd.setCursor(0,1);
+                    lcd.print("$ ");
+                    lcd.print(dineroTotal);
+          } 
+    }
+    if(digitalRead(producto2)==0){
+        delay(200);
+        lcd.clear();
+        lcd.setCursor(3,0);
+        lcd.print("Preparando:");
+        lcd.setCursor(2,1);
+        lcd.print("Chicles Fresa");
+        delay(1600);
+        lcd.clear();
+        if(dineroTotal >= 8){
+            lcd.setCursor(3,0);
+            lcd.print("Aguarde un");
+            lcd.setCursor(5,1);
+            lcd.print("momento");
+                motor2.step(2048);			// envia comando para dar la cantidad de pasos
+                digitalWrite(6, LOW); 		// desenergiza todas las bobinas
+                digitalWrite(7, LOW);
+                digitalWrite(8, LOW);
+                digitalWrite(9, LOW);
+            lcd.clear();
+            lcd.setCursor(1,0);
+            lcd.print("Producto listo");
+            delay(1500);
+            lcd.clear();
+            lcd.setCursor(5,0);
+            lcd.print("cambio: ");
+            dineroTotal = dineroTotal - 8;
+            lcd.setCursor(7,1);
+            lcd.print(dineroTotal);       
+            delay(1700);
+            lcd.clear();
+            monCincuenta = 0;
+            monUno = 0;
+            monDos = 0;
+            monCinco = 0;
+            monDiez = 0;
+            monedasTotales = 0;
+            dineroTotal = 0;
+            lcd.clear();
+            lcd.setCursor(0,0);
+            lcd.print("ingrese monedas");
+            lcd.setCursor(0,1);
+            lcd.print("$ ");
+            lcd.print(dineroTotal);
+            } else {
+                lcd.clear();
+                lcd.setCursor(3,0);
+                lcd.print("No alcanza");
+                delay(1500);
+                lcd.clear();
+                lcd.setCursor(0,0);
+                lcd.print("ingrese monedas");
+                lcd.setCursor(0,1);
+                lcd.print("$ ");
+                lcd.print(dineroTotal);
+            }
+    }
+    if(digitalRead(producto3)==0){
+        delay(200);
+        lcd.clear();
+        lcd.setCursor(3,0);
+        lcd.print("Preparando:");
+        lcd.setCursor(7,1);
+        lcd.print("UVA");
+        delay(1600);
+        lcd.clear();
+        if(dineroTotal >= 15){
+            lcd.setCursor(3,0);
+            lcd.print("Aguarde un");
+            lcd.setCursor(5,1);
+            lcd.print("momento");
+
+            motor3.step(2048);			// envia comando para dar la cantidad de pasos
+            digitalWrite(10, LOW); 		// desenergiza todas las bobinas
+            digitalWrite(11, LOW);
+            digitalWrite(12, LOW);
+            digitalWrite(13, LOW);
+
+            lcd.setCursor(1,0);
+            lcd.print("Producto listo");
+            delay(1500);
+            lcd.clear();
+            lcd.setCursor(5,0);
+            lcd.print("cambio: ");
+            dineroTotal = dineroTotal - 15;
+            lcd.setCursor(7,1);
+            lcd.print(dineroTotal);
+            delay(1700);
+            lcd.clear();
+            monCincuenta = 0;
+            monUno = 0;
+            monDos = 0;
+            monCinco = 0;
+            monDiez = 0;
+
+            // Cálculo de total de monedas y dinero
+            monedasTotales = 0;
+            dineroTotal = 0;
+            lcd.clear();
+            lcd.setCursor(0,0);
+            lcd.print("ingrese monedas");
+            lcd.setCursor(0,1);
+            lcd.print("$ ");
+            lcd.print(dineroTotal);
+
+        } else {
+            lcd.clear();
+            lcd.setCursor(3,0);
+            lcd.print("No alcanza");
+            delay(1500);
+            lcd.clear();
+            lcd.setCursor(0,0);
+            lcd.print("ingrese monedas");
+            lcd.setCursor(0,1);
+            lcd.print("$ ");
+            lcd.print(dineroTotal);
+        } 
+    }
 }
 
 // Función encargada de almacenar los sensores que fueron activados
